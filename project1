@@ -1,0 +1,72 @@
+import csv
+
+
+file1 = open('order_products.csv', 'r')
+file2 = open('products.csv', 'r')
+F0 = open('report.csv', 'w')
+order_products = csv.reader(file1)
+products = csv.reader(file2)
+report = csv.writer(F0)
+
+A = [] # order_id
+B = [] # product_id for file1
+C = [] # add_to_cart
+D = [] # reordered
+
+headers = file1.next()
+for line in file1:
+    line = line.strip()
+    cells = line.split(',')
+    A.append(cells[0])
+    B.append(cells[1])
+    C.append(cells[2])
+    D.append(cells[3])
+
+E = [] # product_id for file2
+F = [] # product_name
+G = [] # aisle_id
+H = [] # dept_id
+
+headers2 = file2.next() # delete headers
+for line in file2:
+    line = line.strip()
+    cells = line.split(',')
+    E.append(cells[0])
+    F.append(cells[1])
+    G.append(cells[2])
+    H.append(cells[3])
+
+
+#NUMBER OF ORDERS and DEPARTMENT ID
+number_of_orders = []
+department_id =[]
+# sort H by smallest to largest
+H.sort(key=int)
+#make frequency array same size as H
+freq = [None] * len(H)
+visited = 0
+#if value of i in the range of H  array make count = 1
+for i in range(0, len(H)):
+    count = 1
+#for values j in range of i+1 to H
+    for j in range(i + 1, len(H)):
+#if that value of j equals the previous value, add 1 to freq
+        if H[i] == H[j]:
+            count = count + 1
+# To avoid counting same element again make that second value now equal 0
+            freq[j] = visited;
+
+    if freq[i] != visited:
+        freq[i] = count;
+
+    # Displays the frequency of each element present in array
+
+for i in range(0, len(freq)):
+    if freq[i] != visited:
+        number_of_orders = str(freq[i])
+        department_id = str(H[i])
+        print (department_id , number_of_orders)
+
+
+
+
